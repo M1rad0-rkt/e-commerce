@@ -1,0 +1,168 @@
+@import "tailwindcss";
+
+/*
+  Identité « Comptoir »
+  Une couleur par type d'offre : le code couleur est une information, pas une décoration.
+  Cobalt = produit, feuille = service, safran = réservation, prune = numérique.
+*/
+@theme {
+  --color-nuit: #101b3a;
+  --color-brume: #eff2f7;
+  --color-cobalt: #2b4bff;
+  --color-feuille: #0b7a55;
+  --color-safran: #ffb400;
+  --color-safran-deep: #7a5200;
+  --color-prune: #9b2fc9;
+  --color-corail: #d63b25;
+  --color-muted: #4a5470;
+
+  --font-sans: "Bricolage Grotesque Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Bricolage Grotesque Variable", ui-sans-serif, system-ui, sans-serif;
+}
+
+@layer base {
+  html {
+    background: var(--color-brume);
+    color: var(--color-nuit);
+    font-family: var(--font-sans);
+    font-optical-sizing: auto;
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+  }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    line-height: 1.55;
+    overflow-x: clip;
+  }
+  h1,
+  h2,
+  h3 {
+    font-stretch: 90%;
+    letter-spacing: -0.012em;
+    line-height: 1.05;
+    font-weight: 750;
+    text-wrap: balance;
+  }
+  p {
+    text-wrap: pretty;
+  }
+  button,
+  input,
+  select,
+  textarea {
+    font: inherit;
+    color: inherit;
+  }
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+  :focus-visible {
+    outline: 3px solid var(--color-cobalt);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+  .price,
+  .tnum {
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+.skip-link {
+  position: absolute;
+  left: 0.5rem;
+  top: -4rem;
+  z-index: 100;
+  background: var(--color-nuit);
+  color: #fff;
+  padding: 0.6rem 1rem;
+  border-radius: 999px;
+}
+.skip-link:focus {
+  top: 0.5rem;
+}
+
+/* Fiche d'offre : un coupon dont le bord est entaillé au niveau de la perforation. */
+.ticket-wrap {
+  filter: drop-shadow(0 1px 0 rgb(16 27 58 / 0.1)) drop-shadow(0 8px 14px rgb(16 27 58 / 0.07));
+}
+.ticket {
+  --r: 10px;
+  --foot: 4.5rem;
+  position: relative;
+  border-radius: 10px;
+  background: #fff;
+  -webkit-mask:
+    radial-gradient(circle var(--r) at 0 calc(100% - var(--foot)), #0000 97%, #000) left / 51% 100% no-repeat,
+    radial-gradient(circle var(--r) at 100% calc(100% - var(--foot)), #0000 97%, #000) right / 51% 100% no-repeat;
+  mask:
+    radial-gradient(circle var(--r) at 0 calc(100% - var(--foot)), #0000 97%, #000) left / 51% 100% no-repeat,
+    radial-gradient(circle var(--r) at 100% calc(100% - var(--foot)), #0000 97%, #000) right / 51% 100% no-repeat;
+}
+.ticket-foot {
+  position: relative;
+  height: var(--foot);
+  flex-shrink: 0;
+}
+.ticket-foot::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: calc(var(--r) + 6px);
+  right: calc(var(--r) + 6px);
+  border-top: 2px dashed rgb(16 27 58 / 0.22);
+}
+
+dialog.drawer {
+  margin: 0 0 0 auto;
+  height: 100dvh;
+  max-height: none;
+  width: min(26rem, 100%);
+  border: 0;
+  padding: 0;
+  background: #fff;
+  color: var(--color-nuit);
+}
+dialog.drawer::backdrop {
+  background: rgb(16 27 58 / 0.55);
+}
+
+@keyframes shimmer {
+  to {
+    background-position: -200% 0;
+  }
+}
+.skeleton {
+  background: linear-gradient(90deg, #e3e8f1 25%, #f2f5fa 50%, #e3e8f1 75%) 0 0 / 200% 100%;
+  animation: shimmer 1.4s linear infinite;
+}
+
+/* Le seul moment animé de la page d'accueil : les fiches du hero se posent. */
+@keyframes settle {
+  from {
+    opacity: 0;
+    transform: translateY(-28px) rotate(var(--from, -6deg));
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) rotate(var(--rot, 0deg));
+  }
+}
+.settle {
+  animation: settle 0.7s cubic-bezier(0.2, 0.9, 0.3, 1.1) both;
+  animation-delay: var(--delay, 0s);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
